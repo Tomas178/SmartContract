@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DApp</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+
+    <body>
+        <div id="Options_table">
+            <div class="options">
+
+                <label>PlanId:</label>
+                <input type="number" min="0" id="PlanId">
+                <br><br>
+
+                <label>PlanFee:</label>
+                <input type="number" min="0" id="PlanFee">
+                <br><br>
+
+                <button onclick="setSubscriptionPlan()">SetSubscriptionPlan</button>
+            </div>
+            <br>
+
+            <button>Subscribe</button>
+            <br><br>
+
+            <button onclick="isSubscriptionActive()">Is my subscription active?</button>
+            <br><br>
+
+            <button>Renew subscription</button>
+            <br><br>
+
+            <button>Unsubscribe</button>
+            <br><br>
+
+            <button onclick="serviceProvider()">ServiceProvider</button>
+            <br><br>    
+
+            <div class="options">
+                <label>PlanIdTToSee:</label>
+                <input type="number" id="PlanIdToSee" min="0">
+                <br><br>
+
+                <p id="PlanFeeForId" readonly style.display: none>The fee for requested PlanId = </p>
+                <button onclick="subscriptionPlans()">subscriptionPlans</button>
+            </div>
+            <br>
+
+            <button>Withdraw (Owner only)</button>
+            <br><br>
+                
+        </div>
+
+        <script src="js/web3.min.js"></script>
+        <script src="js/truffle-contract.js"></script>
+        <script src="js/app.js"></script>
+        <!-- <script src="js/jquery-3.6.0.min.js"></script> -->
+    </body>
+</html>
