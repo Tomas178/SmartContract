@@ -14,10 +14,10 @@ contract SubscriptionService {
     mapping(uint256 => uint256) public subscriptionPlans;
     mapping(address => Subscriber) public subscribers;
 
-    event SubscriptionStarted(address indexed subscriber, uint256 PlanId);
-    event SubscriptionRenewed(address indexed subscriber, uint256 planId);
+    event SubscriptionStarted(address indexed subscriber, uint PlanId);
+    event SubscriptionRenewed(address indexed subscriber, uint planId);
     event SubscriptionCanceled(address indexed subscriber);
-    event SubscriptionPlanSet(uint256 PlanId, uint256 MonthlyFee);
+    event SubscriptionPlanSet(uint PlanId, uint256 MonthlyFee);
     event Withdraw(uint256 balance);
 
     modifier onlyServiceProvider() {
@@ -34,7 +34,7 @@ contract SubscriptionService {
         serviceProvider = msg.sender;
     }
 
-    function setSubscriptionPlan(uint256 planId, uint256 monthlyFee) external onlyServiceProvider {
+    function setSubscriptionPlan(uint planId, uint256 monthlyFee) external onlyServiceProvider {
         subscriptionPlans[planId] = monthlyFee;
         emit SubscriptionPlanSet(planId, monthlyFee);
     }
@@ -69,6 +69,7 @@ contract SubscriptionService {
         require(isSubscriptionActive(), "Subscription expired");
         
         subscribers[msg.sender].subscriptionTime = block.timestamp;
+        // subscribers[msg.sender].balance += msg.value;
 
         emit SubscriptionRenewed(msg.sender, planId);
     }

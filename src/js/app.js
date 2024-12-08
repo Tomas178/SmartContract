@@ -71,10 +71,16 @@ function setSubscriptionPlan(){
             console.log("PlanId:", PlanId, "PlanFee:", PlanFee);
             console.log("Current Account: ", account);
 
-            return SubscriptionServiceInstance.setSubscriptionPlan(PlanId, PlanFee, {from: account});
+            return SubscriptionServiceInstance.serviceProvider( {from: account} );
+        }).then(function(SERVICEPROVIDER) {
+            if(account !== SERVICEPROVIDER){
+                alert("You are not the Service Provider!");
+                throw new Error("ONLY SERVICE PROVIDER CAN USE THIS FUNCTION");
+            }
 
-        }).then(function(result) {
-            console.log("Subscription Is Now Active:", result);
+            return SubscriptionServiceInstance.setSubscriptionPlan(PlanId, PlanFee, {from: account});
+        }).then(function(result){
+            console.log("Subscription Plan Set: ", result);
         }).catch(function(err) {
             console.error("Error checking subscription status:", err);
         });
@@ -117,11 +123,70 @@ function subscriptionPlans() {
                 alert("Failed to fetch the subscription plan.");
             });
     });
-
-
 }
 
+function Subscribe(){
+    let PlanIdToSubscribe = document.getElementById("SubscribeInput").value;
+
+    if(PlanIdToSubscribe === ''){
+        alert("Enter Plan ID that you want to subscribe!");
+        return;
+    }
+
+    App.web3.eth.getAccounts(function(error, accounts){
+        if(error){
+            console.log(error);
+            return;
+        }
+
+        let account = accounts[0];
+        console.log("Current Account: ", account);
+
+        App.contracts.SubscriptionService.deployed().then(function(instance){
+            SubscriptionServiceInstance = instance;
+
+            return SubscriptionServiceInstance.serviceProvider( { from: account });
+        }).then(function(SERVICEPROVIDER){
+            if(account === SERVICEPROVIDER){
+                alert("YOU ARE THE SERVICE PROVIDER!!! YOU CANNOT SUBSCRIBE!!!");
+                throw new Error("Service provider cannot subscribe to plans.");
+            }
+            
+            return SubscriptionServiceInstance.subscriptionPlans(PlanIdToSubscribe);
+        }).then(function(fee){
+            console.log("Fee for subscription plan: ", fee.toString());
+
+            return SubscriptionServiceInstance.subscribe(PlanIdToSubscribe,{ from: account, value: fee });
+        }).then(function(result){
+            console.log("kazkas: ", result);
+        }).catch(function(err){
+            console.error("Error during subscription: ", err);
+        });
+    });
+}
+
+
 function isSubscriptionActive(){
+    App.web3.eth.getAccounts(function(error, accounts){
+        if(error){
+            console.log(error);
+        }
+
+        let account = accounts[0];
+        console.log("Current Account: ", account);
+
+        App.contracts.SubscriptionService.deployed().then(function(instance){
+            SubscriptionServiceInstance = instance;
+
+            return SubscriptionServiceInstance.isSubscriptionActive({from: account});
+
+        }).then(function(result) {
+            console.log("Subscription status: ", result);
+        })
+    });
+}
+
+function cancelSubscription(){
     App.web3.eth.getAccounts(function(error, accounts){
         if(error){
             console.log(error);
@@ -133,11 +198,68 @@ function isSubscriptionActive(){
         App.contracts.SubscriptionService.deployed().then(function(instance) {
             SubscriptionServiceInstance = instance;
 
-            return SubscriptionServiceInstance.isSubscriptionActive({from: account});
+            return SubscriptionServiceInstance.serviceProvider({ from: account });
+        }).then(function(SERVICEPROVIDER){
+            if(account === SERVICEPROVIDER){
+                alert("YOU ARE THE SERVICE PROVIDER!!! YOU CANNOT USE THIS FUNCTION!!!");
+                throw new Error("SERVICE PROVIDER CANNOT USE THIS FUNCTION");
+            }
 
-        }).then(function(result) {
-            console.log(result);
+            return SubscriptionServiceInstance.isSubscriptionActive({ from: account });
+        }).then(function(SubscriptionStatus){
+            if(SubscriptionStatus === false){
+                alert("YOU DON'T HAVE ACTIVE SUBSCRIPTION PLAN!");
+                throw new Error("ONLY ACTIVE SUBSCRIBERS CAN USE THIS FUNCTION");
+            }
+
+            return SubscriptionServiceInstance.cancelSubscription({ from: account }); 
+        }).then(function(result){
+            console.log("Subscription canceled: ", result);
         })
+    });
+}
+
+function autoRenew(){
+    
+    App.web3.eth.getAccounts(function(error, accounts){
+        if(error){
+            console.log(error);
+            return;
+        }
+
+        let account = accounts[0];
+        console.log("Current Account: ", account);
+
+        App.contracts.SubscriptionService.deployed().then(function(instance){
+            SubscriptionServiceInstance = instance;
+
+            return SubscriptionServiceInstance.serviceProvider({ from: account });
+        }).then(function(SERVICEPROVIDER){
+            if(account === SERVICEPROVIDER){
+                alert("YOU ARE THE SERVICE PROVIDER!!! YOU CAN'T USE THIS FUNCTION");
+                throw new Error("SERVICE PROVIDER CAN'T USE THIS FUNCTION");
+            }
+
+            return SubscriptionServiceInstance.isSubscriptionActive({ from: account });
+        }).then(function(SubscriptionStatus){
+            if(SubscriptionStatus === false){
+                alert("YOU DON'T HAVE ACTIVE SUBSCRIPTIONS!");
+                throw new Error("ONLY ACTIVE SUBSCRIBERS CAN USE THIS FUNCTION");
+            }
+
+            return SubscriptionServiceInstance.subscribers(account);
+        }).then(function(SUBSCRIBER){
+            console.log("Subscriber info: ", SUBSCRIBER.toString());
+            return SubscriptionServiceInstance.subscriptionPlans(SUBSCRIBER[2]);
+        }).then(function(fee){
+            console.log("Subscription Fee for Plan: ", fee.toString());
+
+            return SubscriptionServiceInstance.autoRenew({ from: account, value: fee });
+        }).then(function(result){
+            console.log("Successfully subscribed to plan: ", result); 
+        }).catch(function(err){
+            console.log("Error during Renewing proccess: ", err);
+        });
     });
 }
 
@@ -160,12 +282,36 @@ function serviceProvider(){
     });
 }
 
+function withdraw(){
+    App.web3.eth.getAccounts(function(error, accounts){
+        if(error){
+            console.log(error);
+            return;
+        }
 
+        let account = accounts[0];
+        console.log("Current Account: ", account);
 
+        App.contracts.SubscriptionService.deployed().then(function(instance){
+            SubscriptionServiceInstance = instance;
 
+            return SubscriptionServiceInstance.serviceProvider({ from: account });
+        }).then(function(SERVICEPROVIDER){
+            console.log("Service Provider: ", SERVICEPROVIDER);
 
+            if(account !== SERVICEPROVIDER){
+                alert("You are not the Service Provider!");
+                throw new Error("ONLY SERVICE PROVIDER CAN WITHDRAW");
+            }
 
-
+            return SubscriptionServiceInstance.withdraw({ from: account });
+        }).then(function(result){
+            console.log("Withdrawn: ", result);
+        }).catch(function(err){
+            console.error("Error during subscription: ", err);
+        });
+    });
+}
 
 
 

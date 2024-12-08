@@ -25,16 +25,27 @@
             </div>
             <br>
 
-            <button>Subscribe</button>
+
+            <div class="options">
+
+                <label>Enter subscription plan:</label>
+                <input type="number" min="0" id="SubscribeInput">
+                <br>
+
+                <button onclick="Subscribe()">Subscribe</button>
+            </div>
             <br><br>
 
-            <button onclick="isSubscriptionActive()">Is my subscription active?</button>
+            <button onclick="isSubscriptionActive()">My subscription status</button>
             <br><br>
 
-            <button>Renew subscription</button>
+            <button onclick="autoRenew()">Renew subscription</button>
             <br><br>
 
-            <button>Unsubscribe</button>
+
+            <div class="options">
+                <button onclick="cancelSubscription()">Cancel Subscription</button>
+            </div>
             <br><br>
 
             <button onclick="serviceProvider()">ServiceProvider</button>
@@ -50,7 +61,7 @@
             </div>
             <br>
 
-            <button>Withdraw (Owner only)</button>
+            <button onclick="withdraw()">Withdraw (Owner only)</button>
             <br><br>
                 
         </div>
