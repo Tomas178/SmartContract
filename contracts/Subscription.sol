@@ -15,7 +15,6 @@ contract SubscriptionService {
     mapping(address => Subscriber) public subscribers;
 
     event SubscriptionStarted(address indexed subscriber, uint PlanId);
-    event SubscriptionRenewed(address indexed subscriber, uint planId);
     event SubscriptionCanceled(address indexed subscriber);
     event SubscriptionPlanSet(uint PlanId, uint256 MonthlyFee);
     event Withdraw(uint256 balance);
@@ -58,20 +57,6 @@ contract SubscriptionService {
         uint256 elapsedTime = block.timestamp - sub.subscriptionTime;
         uint256 requiredTime = 30 days;
         return elapsedTime <= requiredTime;
-    }
-
-    function autoRenew() external onlyActiveSubscriber payable {
-        uint256 planId = subscribers[msg.sender].planId;
-        uint256 fee = subscriptionPlans[planId];
-        require(fee > 0, "Subscription plan not set");
-        require(msg.value == fee, "Incorrect subscription fee");
-
-        require(isSubscriptionActive(), "Subscription expired");
-        
-        subscribers[msg.sender].subscriptionTime = block.timestamp;
-        // subscribers[msg.sender].balance += msg.value;
-
-        emit SubscriptionRenewed(msg.sender, planId);
     }
 
     function cancelSubscription() external onlyActiveSubscriber {
