@@ -14,51 +14,49 @@
             <div class="options">
 
                 <label>PlanId:</label>
-                <input type="number" min="0" id="PlanId">
-                <br><br>
+                <input class="non-solo-input" type="number" min="0" id="PlanId">
+                <br>
 
                 <label>PlanFee:</label>
-                <input type="number" min="0" id="PlanFee">
-                <br><br>
+                <input class="non-solo-input" type="number" min="0" id="PlanFee">
+                <br>
 
-                <button onclick="setSubscriptionPlan()">SetSubscriptionPlan</button>
+                <button class="non-solo-button" onclick="setSubscriptionPlan()">SetSubscriptionPlan</button>
             </div>
-            <br>
-
 
             <div class="options">
 
                 <label>Enter subscription plan:</label>
-                <input type="number" min="0" id="SubscribeInput">
+                <input class="non-solo-input" type="number" min="0" id="SubscribeInput">
                 <br>
 
-                <button onclick="Subscribe()">Subscribe</button>
+                <button class="non-solo-button" onclick="Subscribe()">Subscribe</button>
             </div>
-            <br><br>
-
-            <button onclick="isSubscriptionActive()">My subscription status</button>
-            <br><br>
 
             <div class="options">
-                <button onclick="cancelSubscription()">Cancel Subscription</button>
+                <button class="solo-button-non-withdraw" onclick="isSubscriptionActive()">My subscription status</button>
             </div>
-            <br>
 
-            <button onclick="serviceProvider()">ServiceProvider</button>
-            <br><br>    
+            <div class="options">
+                <button class="solo-button-non-withdraw" onclick="cancelSubscription()">Cancel Subscription</button>
+            </div>
+
+            <div class="options">
+                <button class="solo-button-non-withdraw" onclick="serviceProvider()">ServiceProvider</button>
+            </div>   
 
             <div class="options">
                 <label>PlanIdTToSee:</label>
-                <input type="number" id="PlanIdToSee" min="0">
-                <br><br>
+                <input class="non-solo-input" type="number" id="PlanIdToSee" min="0">
+                <br>
 
                 <p id="PlanFeeForId" readonly style.display: none>The fee for requested PlanId = </p>
-                <button onclick="subscriptionPlans()">subscriptionPlans</button>
+                <button class="non-solo-button" onclick="subscriptionPlans()">subscriptionPlans</button>
             </div>
-            <br>
 
-            <button onclick="withdraw()">Withdraw (Owner only)</button>
-            <br><br>
+            <div class="options">
+                <button class="solo-button-withdraw" onclick="withdraw()">Withdraw (Owner only)</button>
+            </div>
                 
         </div>
 
