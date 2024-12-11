@@ -35,14 +35,17 @@
 
             <div class="options">
                 <button class="solo-button-non-withdraw" onclick="isSubscriptionActive()">My subscription status</button>
+                <p id="SubscriptionStatusText" readonly style.display: none></p>
             </div>
 
             <div class="options">
                 <button class="solo-button-non-withdraw" onclick="cancelSubscription()">Cancel Subscription</button>
+                <p id="CancelSubscriptionText" readonly style.display: none></p>
             </div>
 
             <div class="options">
                 <button class="solo-button-non-withdraw" onclick="serviceProvider()">ServiceProvider</button>
+                <p id="ServiceProviderText" readonly style.display: none></p>
             </div>   
 
             <div class="options">
@@ -50,7 +53,7 @@
                 <input class="non-solo-input" type="number" id="PlanIdToSee" min="0">
                 <br>
 
-                <p id="PlanFeeForId" readonly style.display: none>The fee for requested PlanId = </p>
+                <p id="PlanFeeForId" readonly style.display: none></p>
                 <button class="non-solo-button" onclick="subscriptionPlans()">subscriptionPlans</button>
             </div>
 

@@ -193,6 +193,14 @@ function isSubscriptionActive(){
 
         }).then(function(result) {
             console.log("Subscription status: ", result);
+
+            document.getElementById("SubscriptionStatusText").style.display = "block";
+
+            if(result === true){
+            document.getElementById("SubscriptionStatusText").textContent ="You have an active subscription";
+            } else{
+            document.getElementById("SubscriptionStatusText").textContent ="You don't have an active subscription";
+            }
         })
     });
 }
@@ -291,6 +299,9 @@ function serviceProvider(){
             return SubscriptionServiceInstance.serviceProvider({from: account});
         }).then(function(result) {
             console.log("Service Provider: ", result);
+
+            document.getElementById("ServiceProviderText").style.display = "block";
+            document.getElementById("ServiceProviderText").textContent ="Service Provider account: " + result;
         })
     });
 }
